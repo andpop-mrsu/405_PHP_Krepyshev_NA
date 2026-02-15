@@ -11,6 +11,6 @@
         ]
     },
     "bin": [
-        "bin/GCD"
+        "bin/GCD.php"
     ]
 }
