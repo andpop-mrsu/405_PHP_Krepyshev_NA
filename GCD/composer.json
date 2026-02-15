@@ -1,0 +1,16 @@
+{
+    "name": "witch-boy/gcd",
+    "description": "game",
+    "require": {
+        "wp-cli/php-cli-tools": "^0.12.7"
+    },
+    "autoload": {
+        "files": [
+            "src/Controller.php",
+            "src/View.php"
+        ]
+    },
+    "bin": [
+        "bin/GCD"
+    ]
+}
