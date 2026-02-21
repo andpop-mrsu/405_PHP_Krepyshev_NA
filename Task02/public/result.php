@@ -3,8 +3,6 @@ session_start();
 require_once 'init_db.php';
 
 $db = get_db();
-
-// можно смотреть результат любой игры по id или текущей из сессии
 $game_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_SESSION['game_id'] ?? 0);
 
 if (!$game_id) {

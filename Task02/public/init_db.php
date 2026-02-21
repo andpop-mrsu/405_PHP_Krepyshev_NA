@@ -1,5 +1,4 @@
 <?php
-// Инициализация базы данных - вызывается автоматически из других страниц
 function get_db() {
     $db_path = dirname(__DIR__) . '/db/game.db';
     $db = new PDO('sqlite:' . $db_path);
