@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>НОД</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Игра: НОД</h1>
+<div id="app">
+  <div id="game-area">
+    <div class="nums" id="pair"></div>
+    <label>Ваш ответ (НОД)</label>
+    <input type="number" id="ans" placeholder="введите число">
+    <button onclick="chk()">Проверить</button>
+    <div id="msg"></div>
+  </div>
+  <hr>
+  <div id="hist">
+    <h2>История игр</h2>
+    <table>
+      <thead><tr><th>#</th><th>Числа</th><th>НОД</th><th>Результат</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let gid = null, a = 0, b = 0;
+
+function gcd(x, y) { return y === 0 ? x : gcd(y, x % y); }
+function rnd(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
+
+async function newGame() {
+  a = rnd(10, 99); b = rnd(10, 99);
+  document.getElementById('pair').textContent = a + '  и  ' + b;
+  document.getElementById('ans').value = '';
+
+  const r = await fetch('/games', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({a, b})
+  });
+  const d = await r.json();
+  gid = d.id;
+}
+
+async function chk() {
+  if (!gid) return;
+  const v = parseInt(document.getElementById('ans').value);
+  if (isNaN(v)) return;
+  const correct = gcd(a, b);
+  const ok = v === correct;
+
+  await fetch('/step/' + gid, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ans: v, correct, ok: ok ? 1 : 0})
+  });
+
+  const m = document.getElementById('msg');
+  m.style.display = 'block';
+  if (ok) {
+    m.className = 'ok';
+    m.textContent = 'Верно! НОД(' + a + ', ' + b + ') = ' + correct;
+  } else {
+    m.className = 'err';
+    m.textContent = 'Неверно. Правильный ответ: ' + correct;
+  }
+
+  loadHist();
+  newGame();
+}
+
+async function loadHist() {
+  const r = await fetch('/games');
+  const gs = await r.json();
+  const tb = document.getElementById('tb');
+  tb.innerHTML = '';
+  gs.filter(g => g.steps && g.steps.length > 0).reverse().forEach(g => {
+    const last = g.steps[g.steps.length - 1];
+    const cls = last.ok ? 'w' : 'l';
+    const res = last.ok ? 'Верно' : 'Неверно';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${g.id}</td><td>${g.a} и ${g.b}</td><td>${gcd(+g.a, +g.b)}</td><td class="${cls}">${res}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+newGame();
+</script>
+</body>
+</html>
