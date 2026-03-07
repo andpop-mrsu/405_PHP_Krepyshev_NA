@@ -1,0 +1,47 @@
+body {
+  font-family: sans-serif;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.nums {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 16px 0;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#msg { margin-top: 10px; }
+.ok { color: green; }
+.err { color: red; }
+
+hr { margin: 20px 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+td, th {
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.w { color: green; }
+.l { color: red; }
